@@ -24,6 +24,16 @@ public class OuttakeArm
         position = Position.UNINITIALIZED;
     }
 
+    public Position retract()
+    {
+        return setPosition(Position.RETRACT);
+    }
+
+    public Position extend()
+    {
+        return setPosition(Position.EXTEND);
+    }
+
     public Position togglePosition()
     {
         switch (position)

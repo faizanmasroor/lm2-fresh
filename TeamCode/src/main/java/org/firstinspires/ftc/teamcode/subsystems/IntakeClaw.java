@@ -34,6 +34,16 @@ public class IntakeClaw
         }
     }
 
+    public Position open()
+    {
+        return setPosition(Position.OPEN);
+    }
+
+    public Position close()
+    {
+        return setPosition(Position.CLOSE);
+    }
+
     public Position getPosition()
     {
         return position;

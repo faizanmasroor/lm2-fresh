@@ -24,6 +24,16 @@ public class OuttakeClaw
         position = Position.UNINITIALIZED;
     }
 
+    public Position open()
+    {
+        return setPosition(Position.OPEN);
+    }
+
+    public Position close()
+    {
+        return setPosition(Position.CLOSE);
+    }
+
     public Position togglePosition()
     {
         switch (position)
