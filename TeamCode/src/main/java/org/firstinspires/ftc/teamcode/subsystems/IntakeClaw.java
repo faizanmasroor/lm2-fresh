@@ -5,9 +5,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class IntakeClaw
 {
+    public static final double OPEN_POSITION = 0.57;
+    public static final double CLOSE_POSITION = 0.66;
+
     public Servo servoClaw;
     public Position position;
-    public final double OPEN_POSITION, CLOSE_POSITION;
 
     public enum Position
     {
@@ -20,8 +22,6 @@ public class IntakeClaw
     {
         servoClaw = hardwareMap.get(Servo.class, "L2");
         position = Position.UNINITIALIZED;
-        OPEN_POSITION = 0.57;
-        CLOSE_POSITION = 0.66;
     }
 
     public boolean is(Position position)

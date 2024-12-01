@@ -5,17 +5,16 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class IntakeSwivel
 {
+    public static final double MIN_POSITION = 0.17;
+    public static final double MAX_POSITION = 0.83;
     public static final double POSITION_INCREMENT = 0.25;
 
     public Servo servoSwivel;
     public double position;
-    public final double MIN_POSITION, MAX_POSITION;
 
     public IntakeSwivel(HardwareMap hardwareMap)
     {
         servoSwivel = hardwareMap.get(Servo.class, "R2");
-        MIN_POSITION = 0.17;
-        MAX_POSITION = 0.83;
         servoSwivel.scaleRange(MIN_POSITION, MAX_POSITION);
     }
 
@@ -31,7 +30,7 @@ public class IntakeSwivel
         servoSwivel.setPosition(position);
     }
 
-    public void moveTo(double newPosition)
+    public void setPosition(double newPosition)
     {
         servoSwivel.setPosition(newPosition);
         position = newPosition;

@@ -5,11 +5,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class IntakeArm
 {
+    public static final double L_RETRACT_POSITION = 0.87;
+    public static final double R_RETRACT_POSITION = 0.13;
+
+    public static final double L_HOVER_POSITION = 0.12;
+    public static final double R_HOVER_POSITION = 0.88;
+
+    public static final double L_EXTEND_POSITION = 0.06;
+    public static final double R_EXTEND_POSITION = 0.94;
+
     public Servo servoL, servoR;
     public Position position;
-    public final double L_RETRACT_POSITION, R_RETRACT_POSITION;
-    public final double L_HOVER_POSITION, R_HOVER_POSITION;
-    public final double L_EXTEND_POSITION, R_EXTEND_POSITION;
 
     public enum Position
     {
@@ -25,15 +31,6 @@ public class IntakeArm
         servoR = hardwareMap.get(Servo.class, "R1");
 
         position = Position.UNINITIALIZED;
-
-        L_RETRACT_POSITION = 0.87;
-        R_RETRACT_POSITION = 0.13;
-
-        L_HOVER_POSITION = 0.12;
-        R_HOVER_POSITION = 0.88;
-
-        L_EXTEND_POSITION = 0.06;
-        R_EXTEND_POSITION = 0.94;
     }
 
     public boolean is(Position position)
