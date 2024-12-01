@@ -6,64 +6,70 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class IntakeArm
 {
     public Servo servoL, servoR;
-    public double servoLExtendPosition, servoRExtendPosition;
-    public double servoLStandbyPosition, servoRStandbyPosition;
-    public double servoLRetractPosition, servoRRetractPosition;
-    public boolean isExtended;
-    public boolean isStandby;
+    public Position position;
+    public double leftRetractPosition, rightRetractPosition;
+    public double leftHoverPosition, rightHoverPosition;
+    public double leftExtendPosition, rightExtendPosition;
+
+    public enum Position
+    {
+        UNINITIALIZED, // Should not be used as an argument for setPosition()
+        RETRACT,
+        HOVER,
+        EXTEND
+    }
 
     public IntakeArm(HardwareMap hardwareMap)
     {
         servoL = hardwareMap.get(Servo.class, "L1");
         servoR = hardwareMap.get(Servo.class, "R1");
 
-        servoLExtendPosition = 0.06;
-        servoRExtendPosition = 0.94;
+        position = Position.UNINITIALIZED;
 
-        servoLStandbyPosition = 0.12;
-        servoRStandbyPosition = 0.88;
+        leftRetractPosition = 0.87;
+        rightRetractPosition = 0.13;
 
-        servoLRetractPosition = 0.87;
-        servoRRetractPosition = 0.13;
+        leftHoverPosition = 0.12;
+        rightHoverPosition = 0.88;
+
+        leftExtendPosition = 0.06;
+        rightExtendPosition = 0.94;
     }
 
-    public void extend()
+    public Position getPosition()
     {
-        servoL.setPosition(servoLExtendPosition);
-        servoR.setPosition(servoRExtendPosition);
-        isExtended = true;
-        isStandby = false;
+        return position;
     }
 
-    public void standby()
+    /**
+     * Changes servo positions to reach the new state (argument). Passing UNINITIALIZED as an
+     * argument does not cause the servos to move nor change the object's {@code position} field.
+     * @param newPosition   the new position to achieve
+     * @return              the position that was achieved
+     */
+    public Position setPosition(Position newPosition)
     {
-        servoL.setPosition(servoLStandbyPosition);
-        servoR.setPosition(servoRStandbyPosition);
-        isExtended = false;
-        isStandby = true;
-    }
+        // Preemptive return statement avoids unnecessary servo setPosition() calls
+        if (newPosition == position) return position;
 
-    public void retract()
-    {
-        servoL.setPosition(servoLRetractPosition);
-        servoR.setPosition(servoRRetractPosition);
-        isExtended = false;
-        isStandby = false;
-    }
+        switch (newPosition)
+        {
+            case RETRACT:
+                servoL.setPosition(leftRetractPosition);
+                servoR.setPosition(rightRetractPosition);
+                break;
+            case HOVER:
+                servoL.setPosition(leftHoverPosition);
+                servoR.setPosition(rightHoverPosition);
+                break;
+            case EXTEND:
+                servoL.setPosition(leftExtendPosition);
+                servoR.setPosition(rightExtendPosition);
+                break;
+        }
 
-    public void extendIfPossible()
-    {
-        if (!isExtended) extend();
-    }
+        if (newPosition != Position.UNINITIALIZED) position = newPosition;
 
-    public void retractIfPossible()
-    {
-        if (isExtended) retract();
-    }
-
-    public void switchPositions()
-    {
-        if (isExtended) retract();
-        else extend();
+        return position;
     }
 }
