@@ -44,6 +44,7 @@ public class IntakeSwivel
     {
         servoSwivel.setPosition(newPosition);
         position = newPosition;
+        isInitialized = true; // Because position is not null
         return position;
     }
 }
