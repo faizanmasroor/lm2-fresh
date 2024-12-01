@@ -36,6 +36,11 @@ public class IntakeArm
         rightExtendPosition = 0.94;
     }
 
+    public boolean is(Position position)
+    {
+        return position == this.position;
+    }
+
     public Position getPosition()
     {
         return position;
