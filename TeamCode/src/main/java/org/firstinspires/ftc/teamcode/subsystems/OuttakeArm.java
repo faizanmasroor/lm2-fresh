@@ -5,26 +5,26 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class OuttakeArm
 {
+    public static final double EXTEND_POSITION = 0.06;
+    public static final double RETRACT_POSITION = 0.85;
+
     public Servo servoArm;
-    public double servoExtendPosition, servoRetractPosition;
     public boolean isExtended;
 
     public OuttakeArm(HardwareMap hardwareMap)
     {
         servoArm = hardwareMap.get(Servo.class, "oArm");
-        servoExtendPosition = 0.06;
-        servoRetractPosition = 0.85;
     }
 
     public void extend()
     {
-        servoArm.setPosition(servoExtendPosition);
+        servoArm.setPosition(EXTEND_POSITION);
         isExtended = true;
     }
 
     public void retract()
     {
-        servoArm.setPosition(servoRetractPosition);
+        servoArm.setPosition(RETRACT_POSITION);
         isExtended = false;
     }
 
