@@ -6,9 +6,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class IntakeSlides
 {
+    public static final int MAX_POSITION = 1100;
+    public static final double SPEED_MULTIPLIER = 0.4;
+
     public DcMotor motorL, motorR;
-    public double SPEED_MULTIPLIER;
-    public int MAX_POSITION;
 
     public IntakeSlides(HardwareMap hardwareMap)
     {
@@ -28,9 +29,6 @@ public class IntakeSlides
 
         motorL.setPower(0);
         motorR.setPower(0);
-
-        MAX_POSITION = 1100;
-        SPEED_MULTIPLIER = 0.4;
     }
 
     public void setPower(double input)
