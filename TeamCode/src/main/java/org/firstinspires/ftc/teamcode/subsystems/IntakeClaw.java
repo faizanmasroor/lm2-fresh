@@ -24,6 +24,26 @@ public class IntakeClaw
         closePosition = 0.66;
     }
 
+    public boolean is(Position position)
+    {
+        return position == this.position;
+    }
+
+    /**
+     * Opens the claw if it's closed, closes the claw if it's open, and does nothing if it's
+     * uninitialized.
+     * @return  the position that was achieved
+     */
+    public Position togglePosition()
+    {
+        switch (position)
+        {
+            case OPEN: return setPosition(Position.CLOSE);
+            case CLOSE: return setPosition(Position.OPEN);
+            default: return Position.UNINITIALIZED;
+        }
+    }
+
     public Position getPosition()
     {
         return position;
