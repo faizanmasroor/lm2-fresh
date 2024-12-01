@@ -9,39 +9,54 @@ public class OuttakeArm
     public static final double RETRACT_POSITION = 0.85;
 
     public Servo servoArm;
-    public boolean isExtended;
+    public ArmPosition armPosition;
+
+    public enum ArmPosition
+    {
+        UNINITIALIZED,
+        EXTEND,
+        RETRACT
+    }
 
     public OuttakeArm(HardwareMap hardwareMap)
     {
         servoArm = hardwareMap.get(Servo.class, "oArm");
+        armPosition = ArmPosition.UNINITIALIZED;
     }
 
-    public void extend()
+    public boolean is(ArmPosition armPosition)
     {
-        servoArm.setPosition(EXTEND_POSITION);
-        isExtended = true;
+        return armPosition == this.armPosition;
     }
 
-    public void retract()
+    public ArmPosition getPosition()
     {
-        servoArm.setPosition(RETRACT_POSITION);
-        isExtended = false;
+        return armPosition;
     }
 
-    public void extendIfPossible()
+    /**
+     * Changes servo positions to reach the new arm position (argument). Passing UNINITIALIZED as an
+     * argument does not cause the servos to move nor change the object's {@code armPosition} field.
+     * @param newArmPosition   the new arm position to achieve
+     * @return              the arm position that was achieved
+     */
+    public ArmPosition setPosition(ArmPosition newArmPosition)
     {
-        if (!isExtended) extend();
-    }
+        // Preemptive return statement avoids unnecessary servo setPosition() calls
+        if (newArmPosition == armPosition) return armPosition;
 
-    public void retractIfPossible()
-    {
-        if (isExtended) retract();
-    }
+        switch (newArmPosition)
+        {
+            case EXTEND:
+                servoArm.setPosition(EXTEND_POSITION);
+                break;
+            case RETRACT:
+                servoArm.setPosition(RETRACT_POSITION);
+                break;
+        }
 
-    public void switchStates()
-    {
-        if (isExtended) retract();
-        else extend();
-    }
+        if (newArmPosition != ArmPosition.UNINITIALIZED) armPosition = newArmPosition;
 
+        return armPosition;
+    }
 }

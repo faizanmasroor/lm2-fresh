@@ -15,9 +15,9 @@ public class IntakeArm
     public static final double R_EXTEND_POSITION = 0.94;
 
     public Servo servoL, servoR;
-    public Position position;
+    public ArmPosition armPosition;
 
-    public enum Position
+    public enum ArmPosition
     {
         UNINITIALIZED, // Should not be used as an argument for setPosition()
         RETRACT,
@@ -30,31 +30,31 @@ public class IntakeArm
         servoL = hardwareMap.get(Servo.class, "L1");
         servoR = hardwareMap.get(Servo.class, "R1");
 
-        position = Position.UNINITIALIZED;
+        armPosition = ArmPosition.UNINITIALIZED;
     }
 
-    public boolean is(Position position)
+    public boolean is(ArmPosition armPosition)
     {
-        return position == this.position;
+        return armPosition == this.armPosition;
     }
 
-    public Position getPosition()
+    public ArmPosition getPosition()
     {
-        return position;
+        return armPosition;
     }
 
     /**
-     * Changes servo positions to reach the new state (argument). Passing UNINITIALIZED as an
-     * argument does not cause the servos to move nor change the object's {@code position} field.
-     * @param newPosition   the new position to achieve
-     * @return              the position that was achieved
+     * Changes servo positions to reach the new arm position (argument). Passing UNINITIALIZED as an
+     * argument does not cause the servos to move nor change the object's {@code armPosition} field.
+     * @param newArmPosition   the new arm position to achieve
+     * @return              the arm position that was achieved
      */
-    public Position setPosition(Position newPosition)
+    public ArmPosition setPosition(ArmPosition newArmPosition)
     {
         // Preemptive return statement avoids unnecessary servo setPosition() calls
-        if (newPosition == position) return position;
+        if (newArmPosition == armPosition) return armPosition;
 
-        switch (newPosition)
+        switch (newArmPosition)
         {
             case RETRACT:
                 servoL.setPosition(L_RETRACT_POSITION);
@@ -70,8 +70,8 @@ public class IntakeArm
                 break;
         }
 
-        if (newPosition != Position.UNINITIALIZED) position = newPosition;
+        if (newArmPosition != ArmPosition.UNINITIALIZED) armPosition = newArmPosition;
 
-        return position;
+        return armPosition;
     }
 }
