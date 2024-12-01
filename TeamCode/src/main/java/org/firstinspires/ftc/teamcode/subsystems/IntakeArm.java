@@ -7,9 +7,9 @@ public class IntakeArm
 {
     public Servo servoL, servoR;
     public Position position;
-    public double leftRetractPosition, rightRetractPosition;
-    public double leftHoverPosition, rightHoverPosition;
-    public double leftExtendPosition, rightExtendPosition;
+    public final double L_RETRACT_POSITION, R_RETRACT_POSITION;
+    public final double L_HOVER_POSITION, R_HOVER_POSITION;
+    public final double L_EXTEND_POSITION, R_EXTEND_POSITION;
 
     public enum Position
     {
@@ -26,14 +26,14 @@ public class IntakeArm
 
         position = Position.UNINITIALIZED;
 
-        leftRetractPosition = 0.87;
-        rightRetractPosition = 0.13;
+        L_RETRACT_POSITION = 0.87;
+        R_RETRACT_POSITION = 0.13;
 
-        leftHoverPosition = 0.12;
-        rightHoverPosition = 0.88;
+        L_HOVER_POSITION = 0.12;
+        R_HOVER_POSITION = 0.88;
 
-        leftExtendPosition = 0.06;
-        rightExtendPosition = 0.94;
+        L_EXTEND_POSITION = 0.06;
+        R_EXTEND_POSITION = 0.94;
     }
 
     public boolean is(Position position)
@@ -60,16 +60,16 @@ public class IntakeArm
         switch (newPosition)
         {
             case RETRACT:
-                servoL.setPosition(leftRetractPosition);
-                servoR.setPosition(rightRetractPosition);
+                servoL.setPosition(L_RETRACT_POSITION);
+                servoR.setPosition(R_RETRACT_POSITION);
                 break;
             case HOVER:
-                servoL.setPosition(leftHoverPosition);
-                servoR.setPosition(rightHoverPosition);
+                servoL.setPosition(L_HOVER_POSITION);
+                servoR.setPosition(R_HOVER_POSITION);
                 break;
             case EXTEND:
-                servoL.setPosition(leftExtendPosition);
-                servoR.setPosition(rightExtendPosition);
+                servoL.setPosition(L_EXTEND_POSITION);
+                servoR.setPosition(R_EXTEND_POSITION);
                 break;
         }
 

@@ -7,7 +7,7 @@ public class IntakeClaw
 {
     public Servo servoClaw;
     public Position position;
-    public double openPosition, closePosition;
+    public final double OPEN_POSITION, CLOSE_POSITION;
 
     public enum Position
     {
@@ -20,8 +20,8 @@ public class IntakeClaw
     {
         servoClaw = hardwareMap.get(Servo.class, "L2");
         position = Position.UNINITIALIZED;
-        openPosition = 0.57;
-        closePosition = 0.66;
+        OPEN_POSITION = 0.57;
+        CLOSE_POSITION = 0.66;
     }
 
     public boolean is(Position position)
@@ -63,10 +63,10 @@ public class IntakeClaw
         switch (newPosition)
         {
             case OPEN:
-                servoClaw.setPosition(openPosition);
+                servoClaw.setPosition(OPEN_POSITION);
                 break;
             case CLOSE:
-                servoClaw.setPosition(closePosition);
+                servoClaw.setPosition(CLOSE_POSITION);
                 break;
         }
 

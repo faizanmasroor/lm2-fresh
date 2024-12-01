@@ -5,34 +5,35 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class IntakeSwivel
 {
-    public Servo servoClaw;
-    public double servoMinPosition, servoMaxPosition;
-    public double curPos;
-    public static final double INCREMENT_AMNT = 0.25;
+    public static final double POSITION_INCREMENT = 0.25;
+
+    public Servo servoSwivel;
+    public double position;
+    public final double MIN_POSITION, MAX_POSITION;
 
     public IntakeSwivel(HardwareMap hardwareMap)
     {
-        servoClaw = hardwareMap.get(Servo.class, "R2");
-        servoMinPosition = 0.17; // need to adjust
-        servoMaxPosition = 0.83; // need to adjust
-        servoClaw.scaleRange(servoMinPosition, servoMaxPosition);
+        servoSwivel = hardwareMap.get(Servo.class, "R2");
+        MIN_POSITION = 0.17;
+        MAX_POSITION = 0.83;
+        servoSwivel.scaleRange(MIN_POSITION, MAX_POSITION);
     }
 
     public void rotCCW()
     {
-        curPos = Math.min(curPos + INCREMENT_AMNT, 1);
-        servoClaw.setPosition(curPos);
+        position = Math.min(position + POSITION_INCREMENT, 1);
+        servoSwivel.setPosition(position);
     }
 
     public void rotCW()
     {
-        curPos = Math.max(curPos - INCREMENT_AMNT, 0);
-        servoClaw.setPosition(curPos);
+        position = Math.max(position - POSITION_INCREMENT, 0);
+        servoSwivel.setPosition(position);
     }
 
-    public void moveTo(double position)
+    public void moveTo(double newPosition)
     {
-        servoClaw.setPosition(position);
-        curPos = position;
+        servoSwivel.setPosition(newPosition);
+        position = newPosition;
     }
 }
