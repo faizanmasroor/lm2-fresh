@@ -6,42 +6,52 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class IntakeClaw
 {
     public Servo servoClaw;
-    public double servoClosePosition, servoOpenPosition;
-    public boolean isOpen;
+    public Position position;
+    public double openPosition, closePosition;
+
+    public enum Position
+    {
+        UNINITIALIZED, // Should not be used as an argument for setPosition()
+        OPEN,
+        CLOSE
+    }
 
     public IntakeClaw(HardwareMap hardwareMap)
     {
         servoClaw = hardwareMap.get(Servo.class, "L2");
-        servoClosePosition = 0.66; // need to adjust
-        servoOpenPosition = 0.57; // need to adjust
+        position = Position.UNINITIALIZED;
+        openPosition = 0.57;
+        closePosition = 0.66;
     }
 
-    public void close()
+    public Position getPosition()
     {
-        servoClaw.setPosition(servoClosePosition);
-        isOpen = false;
+        return position;
     }
 
-    public void open()
+    /**
+     * Changes servo positions to reach the new state (argument). Passing UNINITIALIZED as an
+     * argument does not cause the servos to move nor change the object's {@code position} field.
+     * @param newPosition   the new position to achieve
+     * @return              the position that was achieved
+     */
+    public Position setPosition(Position newPosition)
     {
-        servoClaw.setPosition(servoOpenPosition);
-        isOpen = true;
-    }
+        // Preemptive return statement avoids unnecessary servo setPosition() calls
+        if (newPosition == position) return position;
 
-    public void closeIfPossible()
-    {
-        if (isOpen) close();
-    }
+        switch (newPosition)
+        {
+            case OPEN:
+                servoClaw.setPosition(openPosition);
+                break;
+            case CLOSE:
+                servoClaw.setPosition(closePosition);
+                break;
+        }
 
-    public void openIfPossible()
-    {
-        if (!isOpen) open();
-    }
+        if (newPosition != Position.UNINITIALIZED) position = newPosition;
 
-    public void switchStates()
-    {
-        if (isOpen) close();
-        else open();
+        return position;
     }
-
 }
