@@ -5,68 +5,56 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class OuttakeArm
 {
-    public static final double EXTEND_POSITION = 0.06;
     public static final double RETRACT_POSITION = 0.85;
+    public static final double EXTEND_POSITION = 0.06;
 
     public Servo servoArm;
-    public ArmPosition armPosition;
+    public Position position;
 
-    public enum ArmPosition
+    public enum Position
     {
         UNINITIALIZED,
-        EXTEND,
-        RETRACT
+        RETRACT,
+        EXTEND
     }
 
     public OuttakeArm(HardwareMap hardwareMap)
     {
         servoArm = hardwareMap.get(Servo.class, "oArm");
-        armPosition = ArmPosition.UNINITIALIZED;
+        position = Position.UNINITIALIZED;
     }
 
-    public boolean is(ArmPosition armPosition)
+    public Position togglePosition()
     {
-        return armPosition == this.armPosition;
-    }
-
-    public ArmPosition togglePosition()
-    {
-        switch (armPosition)
+        switch (position)
         {
-            case EXTEND: return setPosition(ArmPosition.RETRACT);
-            case RETRACT: return setPosition(ArmPosition.EXTEND);
-            default: return armPosition;
+            case RETRACT: return setPosition(Position.EXTEND);
+            case EXTEND: return setPosition(Position.RETRACT);
+            default: return position;
         }
     }
 
-    public ArmPosition getPosition()
+    public Position getPosition()
     {
-        return armPosition;
+        return position;
     }
 
-    /**
-     * Changes servo positions to reach the new arm position (argument). Passing UNINITIALIZED as an
-     * argument does not cause the servos to move nor change the object's {@code armPosition} field.
-     * @param newArmPosition   the new arm position to achieve
-     * @return              the arm position that was achieved
-     */
-    public ArmPosition setPosition(ArmPosition newArmPosition)
+    public Position setPosition(Position newPosition)
     {
         // Preemptive return statement avoids unnecessary servo setPosition() calls
-        if (newArmPosition == armPosition) return armPosition;
+        if (newPosition == position || newPosition == Position.UNINITIALIZED) return position;
 
-        switch (newArmPosition)
+        switch (newPosition)
         {
-            case EXTEND:
-                servoArm.setPosition(EXTEND_POSITION);
-                break;
             case RETRACT:
                 servoArm.setPosition(RETRACT_POSITION);
                 break;
+            case EXTEND:
+                servoArm.setPosition(EXTEND_POSITION);
+                break;
         }
+        position = newPosition;
 
-        if (newArmPosition != ArmPosition.UNINITIALIZED) armPosition = newArmPosition;
-
-        return armPosition;
+        return position;
     }
 }

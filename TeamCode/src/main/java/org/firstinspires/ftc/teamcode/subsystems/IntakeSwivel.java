@@ -11,7 +11,7 @@ public class IntakeSwivel
 
     public Servo servoSwivel;
     public double position;
-    public boolean isInitialized; // Used to ensure position is NonNull to avoid errors in rotCCW() and rotCW()
+    public boolean isInitialized; // Ensures the position field is not null when rotCCW() or rotCW() is called
 
     public IntakeSwivel(HardwareMap hardwareMap)
     {
@@ -20,31 +20,30 @@ public class IntakeSwivel
         isInitialized = false;
     }
 
-    public void rotCCW()
+    public double rotCCW()
     {
         if (!isInitialized)
         {
             setPosition(0.5);
             isInitialized = true;
         }
-        position = Math.min(position + POSITION_INCREMENT, 1);
-        servoSwivel.setPosition(position);
+        return setPosition(Math.min(position + POSITION_INCREMENT, 1));
     }
 
-    public void rotCW()
+    public double rotCW()
     {
         if (!isInitialized)
         {
             setPosition(0.5);
             isInitialized = true;
         }
-        position = Math.max(position - POSITION_INCREMENT, 0);
-        servoSwivel.setPosition(position);
+        return setPosition(Math.max(position - POSITION_INCREMENT, 0));
     }
 
-    public void setPosition(double newPosition)
+    public double setPosition(double newPosition)
     {
         servoSwivel.setPosition(newPosition);
         position = newPosition;
+        return position;
     }
 }

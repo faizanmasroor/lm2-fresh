@@ -9,11 +9,11 @@ public class IntakeClaw
     public static final double CLOSE_POSITION = 0.66;
 
     public Servo servoClaw;
-    public ClawPosition clawPosition;
+    public Position position;
 
-    public enum ClawPosition
+    public enum Position
     {
-        UNINITIALIZED, // Should not be used as an argument for setPosition()
+        UNINITIALIZED,
         OPEN,
         CLOSE
     }
@@ -21,47 +21,30 @@ public class IntakeClaw
     public IntakeClaw(HardwareMap hardwareMap)
     {
         servoClaw = hardwareMap.get(Servo.class, "L2");
-        clawPosition = ClawPosition.UNINITIALIZED;
+        position = Position.UNINITIALIZED;
     }
 
-    public boolean is(ClawPosition clawPosition)
+    public Position togglePosition()
     {
-        return clawPosition == this.clawPosition;
-    }
-
-    /**
-     * Opens the claw if it's closed, closes the claw if it's open, and does nothing if it's
-     * uninitialized.
-     * @return  the position that was achieved
-     */
-    public ClawPosition togglePosition()
-    {
-        switch (clawPosition)
+        switch (position)
         {
-            case OPEN: return setPosition(ClawPosition.CLOSE);
-            case CLOSE: return setPosition(ClawPosition.OPEN);
-            default: return clawPosition;
+            case OPEN: return setPosition(Position.CLOSE);
+            case CLOSE: return setPosition(Position.OPEN);
+            default: return position;
         }
     }
 
-    public ClawPosition getPosition()
+    public Position getPosition()
     {
-        return clawPosition;
+        return position;
     }
 
-    /**
-     * Changes servo positions to reach the new claw position (argument). Passing UNINITIALIZED as
-     * an argument does not cause the servos to move nor change the object's {@code clawPosition}
-     * field.
-     * @param newClawPosition   the new claw position to achieve
-     * @return              the claw position that was achieved
-     */
-    public ClawPosition setPosition(ClawPosition newClawPosition)
+    public Position setPosition(Position newPosition)
     {
         // Preemptive return statement avoids unnecessary servo setPosition() calls
-        if (newClawPosition == clawPosition) return clawPosition;
+        if (newPosition == position || newPosition == Position.UNINITIALIZED) return position;
 
-        switch (newClawPosition)
+        switch (newPosition)
         {
             case OPEN:
                 servoClaw.setPosition(OPEN_POSITION);
@@ -70,9 +53,8 @@ public class IntakeClaw
                 servoClaw.setPosition(CLOSE_POSITION);
                 break;
         }
+        position = newPosition;
 
-        if (newClawPosition != ClawPosition.UNINITIALIZED) clawPosition = newClawPosition;
-
-        return clawPosition;
+        return position;
     }
 }

@@ -15,11 +15,11 @@ public class IntakeArm
     public static final double R_EXTEND_POSITION = 0.94;
 
     public Servo servoL, servoR;
-    public ArmPosition armPosition;
+    public Position position;
 
-    public enum ArmPosition
+    public enum Position
     {
-        UNINITIALIZED, // Should not be used as an argument for setPosition()
+        UNINITIALIZED,
         RETRACT,
         HOVER,
         EXTEND
@@ -29,47 +29,30 @@ public class IntakeArm
     {
         servoL = hardwareMap.get(Servo.class, "L1");
         servoR = hardwareMap.get(Servo.class, "R1");
-
-        armPosition = ArmPosition.UNINITIALIZED;
+        position = Position.UNINITIALIZED;
     }
 
-    public boolean is(ArmPosition armPosition)
+    public Position togglePosition()
     {
-        return armPosition == this.armPosition;
-    }
-
-    /**
-     * Switches between RETRACT and HOVER if the armPosition one of those states at the time of
-     * method call. Otherwise, does nothing and returns armPosition at time of method call.
-     * @return  the new armPosition if any change occurred
-     */
-    public ArmPosition togglePosition()
-    {
-        switch (armPosition)
+        switch (position)
         {
-            case RETRACT: return setPosition(ArmPosition.HOVER);
-            case HOVER: return setPosition(ArmPosition.RETRACT);
-            default: return armPosition;
+            case RETRACT: return setPosition(Position.HOVER);
+            case HOVER: return setPosition(Position.RETRACT);
+            default: return position;
         }
     }
 
-    public ArmPosition getPosition()
+    public Position getPosition()
     {
-        return armPosition;
+        return position;
     }
 
-    /**
-     * Changes servo positions to reach the new arm position (argument). Passing UNINITIALIZED as an
-     * argument does not cause the servos to move nor change the object's {@code armPosition} field.
-     * @param newArmPosition   the new arm position to achieve
-     * @return              the arm position that was achieved
-     */
-    public ArmPosition setPosition(ArmPosition newArmPosition)
+    public Position setPosition(Position newPosition)
     {
         // Preemptive return statement avoids unnecessary servo setPosition() calls
-        if (newArmPosition == armPosition) return armPosition;
+        if (newPosition == position || newPosition == Position.UNINITIALIZED) return position;
 
-        switch (newArmPosition)
+        switch (newPosition)
         {
             case RETRACT:
                 servoL.setPosition(L_RETRACT_POSITION);
@@ -84,9 +67,8 @@ public class IntakeArm
                 servoR.setPosition(R_EXTEND_POSITION);
                 break;
         }
+        position = newPosition;
 
-        if (newArmPosition != ArmPosition.UNINITIALIZED) armPosition = newArmPosition;
-
-        return armPosition;
+        return position;
     }
 }
