@@ -38,6 +38,21 @@ public class IntakeArm
         return armPosition == this.armPosition;
     }
 
+    /**
+     * Switches between RETRACT and HOVER if the armPosition one of those states at the time of
+     * method call. Otherwise, does nothing and returns armPosition at time of method call.
+     * @return  the new armPosition if any change occurred
+     */
+    public ArmPosition togglePosition()
+    {
+        switch (armPosition)
+        {
+            case RETRACT: return setPosition(ArmPosition.HOVER);
+            case HOVER: return setPosition(ArmPosition.RETRACT);
+            default: return armPosition;
+        }
+    }
+
     public ArmPosition getPosition()
     {
         return armPosition;

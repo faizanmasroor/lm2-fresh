@@ -29,6 +29,16 @@ public class OuttakeArm
         return armPosition == this.armPosition;
     }
 
+    public ArmPosition togglePosition()
+    {
+        switch (armPosition)
+        {
+            case EXTEND: return setPosition(ArmPosition.RETRACT);
+            case RETRACT: return setPosition(ArmPosition.EXTEND);
+            default: return armPosition;
+        }
+    }
+
     public ArmPosition getPosition()
     {
         return armPosition;

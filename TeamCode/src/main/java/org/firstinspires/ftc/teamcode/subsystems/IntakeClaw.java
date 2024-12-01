@@ -40,7 +40,7 @@ public class IntakeClaw
         {
             case OPEN: return setPosition(ClawPosition.CLOSE);
             case CLOSE: return setPosition(ClawPosition.OPEN);
-            default: return ClawPosition.UNINITIALIZED;
+            default: return clawPosition;
         }
     }
 

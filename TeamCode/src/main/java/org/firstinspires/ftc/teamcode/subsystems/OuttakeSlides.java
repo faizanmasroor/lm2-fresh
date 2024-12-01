@@ -6,9 +6,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class OuttakeSlides
 {
+    public static final double GRAVITY_FEEDFORWARD = 0.001;
+    public static final double MAX_POSITION = 3800;
+    public static final double SPEED_MULTIPLIER = 0.5;
+
     public DcMotor motorL, motorR;
-    public double SPEED_MULTIPLIER, GRAVITY_FEEDFORWARD;
-    public int MAX_POSITION;
 
     public OuttakeSlides(HardwareMap hardwareMap)
     {
@@ -28,10 +30,6 @@ public class OuttakeSlides
 
         motorL.setPower(0);
         motorR.setPower(0);
-
-        SPEED_MULTIPLIER = 0.5;
-        GRAVITY_FEEDFORWARD = 0.001;
-        MAX_POSITION = 4000;
     }
 
     public void setPower(double input)
