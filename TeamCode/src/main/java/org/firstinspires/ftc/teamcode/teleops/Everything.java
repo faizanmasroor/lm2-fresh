@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
 @TeleOp(name = "Everything")
 public class Everything extends OpMode
 {
+    public static final double TRIGGER_THRESHOLD = 0.5;
     public static final int I_ARM_EXTEND_TO_RETRACT_TIME = 1200;
     public static final int I_ARM_RETRACT_TO_HOVER_TIME = 400;
     public static final int STORAGE_SETTLE_TIME = 400;
@@ -49,6 +50,7 @@ public class Everything extends OpMode
     {
         AWAIT_INPUT,
         RETRACT,
+        PREPARE_TRANSFER,
         RELEASE,
         HOVER, // This state only exists to prevent the oArm from extending while the iArm is in the way
     }
@@ -119,7 +121,7 @@ public class Everything extends OpMode
                     break;
 
                 case DESCENDING:
-                    if (intakeProbeTimer.time() > IntakeArm.HOVER_TO_EXTEND_DESCENT_TIME)
+                    if (intakeProbeTimer.time() > IntakeArm.TIME_BETWEEN_HOVER_EXTEND_MS)
                     {
                         iClaw.close();
                         intakeProbeState = IntakeProbe.PROBE;
@@ -154,7 +156,7 @@ public class Everything extends OpMode
                     iClaw.close();
                     iSwivel.center();
                     iArm.retract();
-                    oClaw.open();
+                    oArm.retract();
                     autoTransferTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
                     autoTransferState = AutoTransfer.RETRACT;
                 }
@@ -162,6 +164,15 @@ public class Everything extends OpMode
 
             case RETRACT:
                 if (autoTransferTimer.time() > I_ARM_EXTEND_TO_RETRACT_TIME && iSlides.isRetracted())
+                {
+                    oClaw.open();
+                    autoTransferTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+                    autoTransferState = AutoTransfer.PREPARE_TRANSFER;
+                }
+                break;
+
+            case PREPARE_TRANSFER:
+                if (autoTransferTimer.time() > OuttakeClaw.TIME_TO_TOGGLE_CLAW_MS)
                 {
                     iClaw.open();
                     autoTransferTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -189,21 +200,21 @@ public class Everything extends OpMode
 
         if (gamepads.justPressed(Button.GP2_RIGHT_BUMPER)) iSwivel.rotCW();
 
-        if (gamepads.justEnteredThreshold(Analog.GP2_LEFT_TRIGGER, IntakeArm.TRIGGER_THRESHOLD))
+        if (gamepads.justEnteredThreshold(Analog.GP2_LEFT_TRIGGER, TRIGGER_THRESHOLD))
         {
             iArm.togglePosition(IntakeArm.Position.RETRACT, IntakeArm.Position.HOVER);
         }
 
-        if (gamepads.justEnteredThreshold(Analog.GP2_RIGHT_TRIGGER, OuttakeArm.TRIGGER_THRESHOLD) && autoTransferState == AutoTransfer.AWAIT_INPUT)
+        if (gamepads.justEnteredThreshold(Analog.GP2_RIGHT_TRIGGER, TRIGGER_THRESHOLD) && autoTransferState == AutoTransfer.AWAIT_INPUT)
         {
             oArm.togglePosition();
         }
 
         double iSlidesInput = gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_Y);
-        if (!iSlides.isDangerous(iSlidesInput)) iSlides.setPower(iSlidesInput);
+        if (!iSlides.isDangerousInput(iSlidesInput)) iSlides.setPower(iSlidesInput);
 
         double oSlidesInput = gamepads.getAnalogValue(Analog.GP2_RIGHT_STICK_Y);
-        if (!oSlides.isDangerous(oSlidesInput)) oSlides.setPower(oSlidesInput);
+        if (!oSlides.isDangerousInput(oSlidesInput)) oSlides.setPower(oSlidesInput);
 
         gamepads.update(gamepad1, gamepad2); // SUPER DUPER IMPORTANT!
     }
