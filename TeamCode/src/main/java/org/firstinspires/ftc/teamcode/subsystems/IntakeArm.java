@@ -14,6 +14,9 @@ public class IntakeArm
     public static final double L_EXTEND_POSITION = 0.06;
     public static final double R_EXTEND_POSITION = 0.94;
 
+    public static final double TRIGGER_THRESHOLD = 0.5;
+    public static final int HOVER_TO_EXTEND_DESCENT_TIME = 500;
+
     public Servo servoL, servoR;
     public Position position;
 
@@ -47,17 +50,15 @@ public class IntakeArm
         setPosition(Position.EXTEND);
     }
 
-    public void togglePosition()
+    /**
+     * Toggles between two positions if the arm is already in one the two positions.
+     * @param pos1  first position
+     * @param pos2  second position
+     */
+    public void togglePosition(Position pos1, Position pos2)
     {
-        switch (position)
-        {
-            case RETRACT:
-                setPosition(Position.HOVER);
-                break;
-            case HOVER:
-                setPosition(Position.RETRACT);
-                break;
-        }
+        if (position == pos1) setPosition(pos2);
+        else if (position == pos2) setPosition(pos1);
     }
 
     public Position getPosition()

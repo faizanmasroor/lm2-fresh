@@ -7,6 +7,7 @@ public class IntakeSwivel
 {
     public static final double MIN_POSITION = 0.17;
     public static final double MAX_POSITION = 0.83;
+    public static final double CENTER_POSITION = 0.5;
     public static final double POSITION_INCREMENT = 0.25;
 
     public Servo servoSwivel;
@@ -38,6 +39,11 @@ public class IntakeSwivel
             isInitialized = true;
         }
         setPosition(Math.max(position - POSITION_INCREMENT, 0));
+    }
+
+    public void center()
+    {
+        setPosition(CENTER_POSITION);
     }
 
     public double getPosition()

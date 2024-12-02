@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode.teleops;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.control.Analog;
+import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeArm;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeClaw;
@@ -16,15 +19,39 @@ import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
 @TeleOp(name = "Everything")
 public class Everything extends OpMode
 {
-    IntakeArm iArm;
-    IntakeClaw iClaw;
-    IntakeSwivel iSwivel;
-    IntakeSlides iSlides;
-    OuttakeArm oArm;
-    OuttakeClaw oClaw;
-    OuttakeSlides oSlides;
-    TeleDrive drive;
-    Gamepads gamepads;
+    public static final int I_ARM_EXTEND_TO_RETRACT_TIME = 1200;
+    public static final int I_ARM_RETRACT_TO_HOVER_TIME = 400;
+    public static final int STORAGE_SETTLE_TIME = 400;
+
+    public IntakeArm iArm;
+    public IntakeClaw iClaw;
+    public IntakeSwivel iSwivel;
+    public IntakeSlides iSlides;
+    public OuttakeArm oArm;
+    public OuttakeClaw oClaw;
+    public OuttakeSlides oSlides;
+    public TeleDrive teleDrive;
+    public Gamepads gamepads;
+
+    public ElapsedTime intakeProbeTimer;
+    public IntakeProbe intakeProbeState;
+    public ElapsedTime autoTransferTimer;
+    public AutoTransfer autoTransferState;
+
+    public enum IntakeProbe
+    {
+        HOVER, // iArm is hovering and iClaw is open, ready for X to be pressed
+        DESCENDING, // iArm is descending and will wait until it is fully extended (determined via timer) before moving on to closing iClaw
+        PROBE, // iArm is fully extended and iClaw is closed/gripping
+    }
+
+    public enum AutoTransfer
+    {
+        AWAIT_INPUT,
+        RETRACT,
+        RELEASE,
+        HOVER, // This state only exists to prevent the oArm from extending while the iArm is in the way
+    }
 
     @Override
     public void init()
@@ -36,8 +63,11 @@ public class Everything extends OpMode
         oArm = new OuttakeArm(hardwareMap);
         oClaw = new OuttakeClaw(hardwareMap);
         oSlides = new OuttakeSlides(hardwareMap);
-        drive = new TeleDrive(hardwareMap);
+        teleDrive = new TeleDrive(hardwareMap);
         gamepads = new Gamepads(gamepad1, gamepad2);
+
+        intakeProbeState = IntakeProbe.HOVER;
+        autoTransferState = AutoTransfer.AWAIT_INPUT;
     }
 
     @Override
@@ -49,7 +79,7 @@ public class Everything extends OpMode
          */
         iArm.hover();
         iClaw.open();
-        iSwivel.setPosition(0.5);
+        iSwivel.center();
         oArm.retract();
         oClaw.open();
     }
@@ -57,6 +87,118 @@ public class Everything extends OpMode
     @Override
     public void loop()
     {
+        if (gamepads.justPressed(Button.GP1_LEFT_BUMPER)) teleDrive.toggleSlowMode();
+
+        double drive = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
+        double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
+        double turn = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
+        teleDrive.updateMotorPowers(drive, strafe, turn);
+
+        if (gamepads.justPressed(Button.GP2_A)) oClaw.togglePosition();
+
+        // The auto transfer sequence must be inactive to use intake probing.
+        if (autoTransferState == AutoTransfer.AWAIT_INPUT)
+        {
+            switch (intakeProbeState)
+            {
+                case HOVER:
+                    /*
+                    Additional check (iArm.getPosition() == IntakeArm.Position.HOVER) requires the
+                    arm to be in hover position for GP2_X to work, because manual iArm control
+                    (GP2_LEFT_TRIGGER) can put iArm in the retracted position while intakeProbeState
+                    is simultaneously HOVER. This is done because intakeProbeTimer cuts off when it
+                    exceeds IntakeArm.HOVER_TO_EXTEND_DESCENT_TIME.
+                     */
+                    if (gamepads.justPressed(Button.GP2_X) && iArm.getPosition() == IntakeArm.Position.HOVER)
+                    {
+                        iArm.extend();
+                        iClaw.open();
+                        intakeProbeTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+                        intakeProbeState = IntakeProbe.DESCENDING;
+                    }
+                    break;
+
+                case DESCENDING:
+                    if (intakeProbeTimer.time() > IntakeArm.HOVER_TO_EXTEND_DESCENT_TIME)
+                    {
+                        iClaw.close();
+                        intakeProbeState = IntakeProbe.PROBE;
+                    }
+                    break;
+
+                case PROBE:
+                    if (gamepads.justPressed(Button.GP2_X))
+                    {
+                        iArm.hover();
+                        iClaw.open();
+                        intakeProbeState = IntakeProbe.HOVER;
+                    }
+                    break;
+            }
+        }
+
+        // Option for exiting auto transfer sequence while it is active
+        if (gamepads.justPressed(Button.GP2_Y) && autoTransferState != AutoTransfer.AWAIT_INPUT)
+        {
+            iArm.hover();
+            iClaw.open();
+            autoTransferState = AutoTransfer.AWAIT_INPUT;
+            intakeProbeState = IntakeProbe.HOVER;
+        }
+
+        switch (autoTransferState)
+        {
+            case AWAIT_INPUT:
+                if (gamepads.justPressed(Button.GP2_Y) && intakeProbeState == IntakeProbe.PROBE)
+                {
+                    iClaw.close();
+                    iSwivel.center();
+                    iArm.retract();
+                    oClaw.open();
+                    autoTransferTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+                    autoTransferState = AutoTransfer.RETRACT;
+                }
+                break;
+
+            case RETRACT:
+                if (autoTransferTimer.time() > I_ARM_EXTEND_TO_RETRACT_TIME && iSlides.isRetracted())
+                {
+                    iClaw.open();
+                    autoTransferTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+                    autoTransferState = AutoTransfer.RELEASE;
+                }
+                break;
+
+            case RELEASE:
+                if (autoTransferTimer.time() > STORAGE_SETTLE_TIME)
+                {
+                    oClaw.close();
+                    iArm.hover();
+                    autoTransferTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+                    autoTransferState = AutoTransfer.HOVER;
+                }
+            case HOVER:
+                if (autoTransferTimer.time() > I_ARM_RETRACT_TO_HOVER_TIME)
+                {
+                    autoTransferState = AutoTransfer.AWAIT_INPUT;
+                }
+                break;
+        }
+
+        if (gamepads.justPressed(Button.GP2_LEFT_BUMPER)) iSwivel.rotCCW();
+
+        if (gamepads.justPressed(Button.GP2_RIGHT_BUMPER)) iSwivel.rotCW();
+
+        if (gamepads.justEnteredThreshold(Analog.GP2_LEFT_TRIGGER, IntakeArm.TRIGGER_THRESHOLD))
+        {
+            iArm.togglePosition(IntakeArm.Position.RETRACT, IntakeArm.Position.HOVER);
+        }
+
+        if (gamepads.justEnteredThreshold(Analog.GP2_RIGHT_TRIGGER, OuttakeArm.TRIGGER_THRESHOLD) && autoTransferState == AutoTransfer.AWAIT_INPUT)
+        {
+            oArm.togglePosition();
+        }
+
         gamepads.update(gamepad1, gamepad2); // SUPER DUPER IMPORTANT!
     }
 }
