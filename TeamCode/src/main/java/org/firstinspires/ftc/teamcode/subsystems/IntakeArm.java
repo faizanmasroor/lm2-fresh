@@ -32,28 +32,31 @@ public class IntakeArm
         position = Position.UNINITIALIZED;
     }
 
-    public Position retract()
+    public void retract()
     {
-        return setPosition(Position.RETRACT);
+        setPosition(Position.RETRACT);
     }
 
-    public Position hover()
+    public void hover()
     {
-        return setPosition(Position.HOVER);
+        setPosition(Position.HOVER);
     }
 
-    public Position extend()
+    public void extend()
     {
-        return setPosition(Position.EXTEND);
+        setPosition(Position.EXTEND);
     }
 
-    public Position togglePosition()
+    public void togglePosition()
     {
         switch (position)
         {
-            case RETRACT: return setPosition(Position.HOVER);
-            case HOVER: return setPosition(Position.RETRACT);
-            default: return position;
+            case RETRACT:
+                setPosition(Position.HOVER);
+                break;
+            case HOVER:
+                setPosition(Position.RETRACT);
+                break;
         }
     }
 
@@ -62,10 +65,10 @@ public class IntakeArm
         return position;
     }
 
-    public Position setPosition(Position newPosition)
+    public void setPosition(Position newPosition)
     {
         // Preemptive return statement avoids unnecessary servo setPosition() calls
-        if (newPosition == position || newPosition == Position.UNINITIALIZED) return position;
+        if (newPosition == position || newPosition == Position.UNINITIALIZED) return;
 
         switch (newPosition)
         {
@@ -83,7 +86,5 @@ public class IntakeArm
                 break;
         }
         position = newPosition;
-
-        return position;
     }
 }

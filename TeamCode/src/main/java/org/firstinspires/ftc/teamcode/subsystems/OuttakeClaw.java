@@ -24,23 +24,26 @@ public class OuttakeClaw
         position = Position.UNINITIALIZED;
     }
 
-    public Position open()
+    public void open()
     {
-        return setPosition(Position.OPEN);
+        setPosition(Position.OPEN);
     }
 
-    public Position close()
+    public void close()
     {
-        return setPosition(Position.CLOSE);
+        setPosition(Position.CLOSE);
     }
 
-    public Position togglePosition()
+    public void togglePosition()
     {
         switch (position)
         {
-            case OPEN: return setPosition(Position.CLOSE);
-            case CLOSE: return setPosition(Position.OPEN);
-            default: return position;
+            case OPEN:
+                setPosition(Position.CLOSE);
+                break;
+            case CLOSE:
+                setPosition(Position.OPEN);
+                break;
         }
     }
 
@@ -49,10 +52,10 @@ public class OuttakeClaw
         return position;
     }
 
-    public Position setPosition(Position newPosition)
+    public void setPosition(Position newPosition)
     {
         // Preemptive return statement avoids unnecessary servo setPosition() calls
-        if (newPosition == position || newPosition == Position.UNINITIALIZED) return position;
+        if (newPosition == position || newPosition == Position.UNINITIALIZED) return;
 
         switch (newPosition)
         {
@@ -64,7 +67,5 @@ public class OuttakeClaw
                 break;
         }
         position = newPosition;
-
-        return position;
     }
 }

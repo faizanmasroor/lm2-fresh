@@ -24,23 +24,26 @@ public class OuttakeArm
         position = Position.UNINITIALIZED;
     }
 
-    public Position retract()
+    public void retract()
     {
-        return setPosition(Position.RETRACT);
+        setPosition(Position.RETRACT);
     }
 
-    public Position extend()
+    public void extend()
     {
-        return setPosition(Position.EXTEND);
+        setPosition(Position.EXTEND);
     }
 
-    public Position togglePosition()
+    public void togglePosition()
     {
         switch (position)
         {
-            case RETRACT: return setPosition(Position.EXTEND);
-            case EXTEND: return setPosition(Position.RETRACT);
-            default: return position;
+            case RETRACT:
+                setPosition(Position.EXTEND);
+                break;
+            case EXTEND:
+                setPosition(Position.RETRACT);
+                break;
         }
     }
 
@@ -49,10 +52,10 @@ public class OuttakeArm
         return position;
     }
 
-    public Position setPosition(Position newPosition)
+    public void setPosition(Position newPosition)
     {
         // Preemptive return statement avoids unnecessary servo setPosition() calls
-        if (newPosition == position || newPosition == Position.UNINITIALIZED) return position;
+        if (newPosition == position || newPosition == Position.UNINITIALIZED) return;
 
         switch (newPosition)
         {
@@ -64,7 +67,5 @@ public class OuttakeArm
                 break;
         }
         position = newPosition;
-
-        return position;
     }
 }

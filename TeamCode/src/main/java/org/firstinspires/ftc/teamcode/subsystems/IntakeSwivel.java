@@ -20,31 +20,35 @@ public class IntakeSwivel
         isInitialized = false;
     }
 
-    public double rotCCW()
+    public void rotCCW()
     {
         if (!isInitialized)
         {
             setPosition(0.5);
             isInitialized = true;
         }
-        return setPosition(Math.min(position + POSITION_INCREMENT, 1));
+        setPosition(Math.min(position + POSITION_INCREMENT, 1));
     }
 
-    public double rotCW()
+    public void rotCW()
     {
         if (!isInitialized)
         {
             setPosition(0.5);
             isInitialized = true;
         }
-        return setPosition(Math.max(position - POSITION_INCREMENT, 0));
+        setPosition(Math.max(position - POSITION_INCREMENT, 0));
     }
 
-    public double setPosition(double newPosition)
+    public double getPosition()
+    {
+        return position;
+    }
+
+    public void setPosition(double newPosition)
     {
         servoSwivel.setPosition(newPosition);
         position = newPosition;
         isInitialized = true; // Because position is not null
-        return position;
     }
 }
