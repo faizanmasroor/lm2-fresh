@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleops;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.control.Gamepads;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeArm;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeClaw;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlides;
@@ -23,6 +24,7 @@ public class Everything extends OpMode
     OuttakeClaw oClaw;
     OuttakeSlides oSlides;
     TeleDrive drive;
+    Gamepads gamepads;
 
     @Override
     public void init()
@@ -35,6 +37,7 @@ public class Everything extends OpMode
         oClaw = new OuttakeClaw(hardwareMap);
         oSlides = new OuttakeSlides(hardwareMap);
         drive = new TeleDrive(hardwareMap);
+        gamepads = new Gamepads(gamepad1, gamepad2);
     }
 
     @Override
@@ -54,6 +57,6 @@ public class Everything extends OpMode
     @Override
     public void loop()
     {
-
+        gamepads.update(gamepad1, gamepad2); // SUPER DUPER IMPORTANT!
     }
 }
