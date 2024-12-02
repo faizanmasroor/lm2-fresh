@@ -199,6 +199,12 @@ public class Everything extends OpMode
             oArm.togglePosition();
         }
 
+        double iSlidesInput = gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_Y);
+        if (!iSlides.isDangerous(iSlidesInput)) iSlides.setPower(iSlidesInput);
+
+        double oSlidesInput = gamepads.getAnalogValue(Analog.GP2_RIGHT_STICK_Y);
+        if (!oSlides.isDangerous(oSlidesInput)) oSlides.setPower(oSlidesInput);
+
         gamepads.update(gamepad1, gamepad2); // SUPER DUPER IMPORTANT!
     }
 }

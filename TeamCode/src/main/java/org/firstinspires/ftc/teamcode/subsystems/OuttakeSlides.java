@@ -6,9 +6,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class OuttakeSlides
 {
-    public static final double GRAVITY_FEEDFORWARD = 0.001;
     public static final double MAX_POSITION = 3800;
+    public static final double POSITION_BUFFER = 50;
     public static final double SPEED_MULTIPLIER = 0.5;
+    public static final double GRAVITY_FEEDFORWARD = 0.001;
 
     public DcMotor motorL, motorR;
 
@@ -30,6 +31,21 @@ public class OuttakeSlides
 
         motorL.setPower(0);
         motorR.setPower(0);
+    }
+
+    public boolean isExtended()
+    {
+        return Math.round((motorL.getCurrentPosition() + motorR.getCurrentPosition()) / 2.0) >= MAX_POSITION - POSITION_BUFFER;
+    }
+
+    public boolean isRetracted()
+    {
+        return Math.round((motorL.getCurrentPosition() + motorR.getCurrentPosition()) / 2.0) <= POSITION_BUFFER;
+    }
+
+    public boolean isDangerous(double input)
+    {
+        return (isExtended() && input > 0) || (isRetracted() && input < 0);
     }
 
     public void setPower(double input)

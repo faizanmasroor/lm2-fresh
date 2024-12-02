@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class IntakeSlides
 {
-    public static final int MAX_POSITION = 1100;
-    public static final int POSITION_BUFFER = 30;
+    public static final double MAX_POSITION = 1100;
+    public static final double POSITION_BUFFER = 30;
     public static final double SPEED_MULTIPLIER = 0.4;
 
     public DcMotor motorL, motorR;
@@ -40,6 +40,11 @@ public class IntakeSlides
     public boolean isRetracted()
     {
         return Math.round((motorL.getCurrentPosition() + motorR.getCurrentPosition()) / 2.0) <= POSITION_BUFFER;
+    }
+
+    public boolean isDangerous(double input)
+    {
+        return (isExtended() && input > 0) || (isRetracted() && input < 0);
     }
 
     public void setPower(double input)
