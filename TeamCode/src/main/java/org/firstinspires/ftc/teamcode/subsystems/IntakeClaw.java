@@ -24,6 +24,16 @@ public class IntakeClaw
         position = Position.UNINITIALIZED;
     }
 
+    public void open()
+    {
+        setPosition(Position.OPEN);
+    }
+
+    public void close()
+    {
+        setPosition(Position.CLOSE);
+    }
+
     public void togglePosition()
     {
         switch (position)
@@ -35,16 +45,6 @@ public class IntakeClaw
                 setPosition(Position.OPEN);
                 break;
         }
-    }
-
-    public void open()
-    {
-        setPosition(Position.OPEN);
-    }
-
-    public void close()
-    {
-        setPosition(Position.CLOSE);
     }
 
     public Position getPosition()

@@ -17,6 +17,7 @@ public class IntakeSlides
         motorL = hardwareMap.get(DcMotor.class, "iSlideL");
         motorR = hardwareMap.get(DcMotor.class, "iSlideR");
 
+        motorL.setDirection(DcMotorSimple.Direction.FORWARD);
         motorR.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -42,7 +43,7 @@ public class IntakeSlides
         return Math.round((motorL.getCurrentPosition() + motorR.getCurrentPosition()) / 2.0) <= POSITION_BUFFER;
     }
 
-    public boolean isDangerous(double input)
+    public boolean isDangerousInput(double input)
     {
         return (isExtended() && input > 0) || (isRetracted() && input < 0);
     }

@@ -23,21 +23,13 @@ public class IntakeSwivel
 
     public void rotCCW()
     {
-        if (!isInitialized)
-        {
-            setPosition(0.5);
-            isInitialized = true;
-        }
+        if (!isInitialized) center();
         setPosition(Math.min(position + POSITION_INCREMENT, 1));
     }
 
     public void rotCW()
     {
-        if (!isInitialized)
-        {
-            setPosition(0.5);
-            isInitialized = true;
-        }
+        if (!isInitialized) center();
         setPosition(Math.max(position - POSITION_INCREMENT, 0));
     }
 

@@ -7,7 +7,6 @@ public class OuttakeArm
 {
     public static final double RETRACT_POSITION = 0.85;
     public static final double EXTEND_POSITION = 0.06;
-    public static final double TRIGGER_THRESHOLD = 0.5;
 
     public Servo servoArm;
     public Position position;

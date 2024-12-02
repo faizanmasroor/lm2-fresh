@@ -14,8 +14,10 @@ public class IntakeArm
     public static final double L_EXTEND_POSITION = 0.06;
     public static final double R_EXTEND_POSITION = 0.94;
 
-    public static final double TRIGGER_THRESHOLD = 0.5;
-    public static final int HOVER_TO_EXTEND_DESCENT_TIME = 500;
+    public static final int TIME_BETWEEN_RETRACT_HOVER_MS = 900;
+    public static final int TIME_BETWEEN_HOVER_EXTEND_MS = 400;
+    public static final int TIME_BETWEEN_RETRACT_EXTEND_MS =
+            TIME_BETWEEN_RETRACT_HOVER_MS + TIME_BETWEEN_HOVER_EXTEND_MS;
 
     public Servo servoL, servoR;
     public Position position;

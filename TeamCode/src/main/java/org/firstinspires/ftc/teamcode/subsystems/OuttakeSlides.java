@@ -19,6 +19,7 @@ public class OuttakeSlides
         motorR = hardwareMap.get(DcMotor.class, "oSlideR");
 
         motorL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorR.setDirection(DcMotorSimple.Direction.FORWARD);
 
         motorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -43,7 +44,7 @@ public class OuttakeSlides
         return Math.round((motorL.getCurrentPosition() + motorR.getCurrentPosition()) / 2.0) <= POSITION_BUFFER;
     }
 
-    public boolean isDangerous(double input)
+    public boolean isDangerousInput(double input)
     {
         return (isExtended() && input > 0) || (isRetracted() && input < 0);
     }
