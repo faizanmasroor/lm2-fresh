@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -70,6 +72,8 @@ public class Everything extends OpMode
 
         intakeProbeState = IntakeProbe.HOVER;
         autoTransferState = AutoTransfer.AWAIT_INPUT;
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     @Override
@@ -211,11 +215,19 @@ public class Everything extends OpMode
         }
 
         double iSlidesInput = gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_Y);
-        if (!iSlides.isDangerousInput(iSlidesInput)) iSlides.setPower(iSlidesInput);
-
         double oSlidesInput = gamepads.getAnalogValue(Analog.GP2_RIGHT_STICK_Y);
-        if (!oSlides.isDangerousInput(oSlidesInput)) oSlides.setPower(oSlidesInput);
 
+        iSlides.setPower(iSlidesInput);
+        oSlides.setPower(oSlidesInput);
+
+        telemetry.addData("Raw Intake Slide Input", iSlidesInput);
+        telemetry.addData("Raw Outtake Slide Input", oSlidesInput);
+        telemetry.addData("In L Position", iSlides.motorL.getCurrentPosition());
+        telemetry.addData("In R Position", iSlides.motorR.getCurrentPosition());
+        telemetry.addData("Out L Position", oSlides.motorL.getCurrentPosition());
+        telemetry.addData("Out R Position", oSlides.motorR.getCurrentPosition());
+
+        telemetry.update();
         gamepads.update(gamepad1, gamepad2); // SUPER DUPER IMPORTANT!
     }
 }

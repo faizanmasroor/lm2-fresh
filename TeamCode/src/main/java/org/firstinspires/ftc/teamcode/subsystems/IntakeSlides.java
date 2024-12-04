@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class IntakeSlides
 {
-    public static final double MAX_POSITION = 1100;
+    public static final double MAX_POSITION = 1000;
     public static final double POSITION_BUFFER = 30;
     public static final double SPEED_MULTIPLIER = 0.4;
 
@@ -17,7 +17,6 @@ public class IntakeSlides
         motorL = hardwareMap.get(DcMotor.class, "iSlideL");
         motorR = hardwareMap.get(DcMotor.class, "iSlideR");
 
-        motorL.setDirection(DcMotorSimple.Direction.FORWARD);
         motorR.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

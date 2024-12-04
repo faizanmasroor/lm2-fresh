@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class OuttakeSlides
 {
-    public static final double MAX_POSITION = 3800;
+    public static final double MAX_POSITION = 3750;
     public static final double POSITION_BUFFER = 50;
     public static final double SPEED_MULTIPLIER = 0.5;
     public static final double GRAVITY_FEEDFORWARD = 0.001;
@@ -19,7 +19,6 @@ public class OuttakeSlides
         motorR = hardwareMap.get(DcMotor.class, "oSlideR");
 
         motorL.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorR.setDirection(DcMotorSimple.Direction.FORWARD);
 
         motorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
