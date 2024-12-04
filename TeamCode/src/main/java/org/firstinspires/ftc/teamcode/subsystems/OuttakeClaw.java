@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class OuttakeClaw
 {
     public static final double OPEN_POSITION = 0.55;
-    public static final double CLOSE_POSITION = 0.44;
+    public static final double CLOSE_POSITION = 0.41;
     public static final double TIME_TO_TOGGLE_CLAW_MS = 400;
 
     public Servo servoClaw;
