@@ -9,7 +9,7 @@ public class OuttakeSlides
     public static final double MAX_POSITION = 3750;
     public static final double POSITION_BUFFER = 50;
     public static final double SPEED_MULTIPLIER = 0.5;
-    public static final double GRAVITY_FEEDFORWARD = 0.001;
+    public static final double GRAVITY_FEEDFORWARD = 0.0006;
 
     public DcMotor motorL, motorR;
 
