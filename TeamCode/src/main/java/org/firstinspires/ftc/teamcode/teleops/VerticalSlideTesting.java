@@ -37,6 +37,8 @@ public class VerticalSlideTesting extends OpMode
 
         oSlides.updatePower();
 
+        gamepads.update(gamepad1, gamepad2);
+
         telemetry.addData("Outtake Left Position", oSlides.motorL.getCurrentPosition());
         telemetry.addData("Outtake Right Position", oSlides.motorR.getCurrentPosition());
 
