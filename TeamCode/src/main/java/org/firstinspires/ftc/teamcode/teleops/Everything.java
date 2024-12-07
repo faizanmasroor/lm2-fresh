@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
 public class Everything extends OpMode
 {
     public static final double TRIGGER_THRESHOLD = 0.5;
-    public static final int I_ARM_EXTEND_TO_RETRACT_TIME = 1200;
+    public static final int I_ARM_EXTEND_TO_RETRACT_TIME = 800;
     public static final int I_ARM_RETRACT_TO_HOVER_TIME = 400;
     public static final int STORAGE_SETTLE_TIME = 400;
 

@@ -78,8 +78,8 @@ public class TeleDrive
         }
         else
         {
-            SPEED_MULTIPLIER = 0.2;
-            TURN_SPEED_MULTIPLIER = 0.5;
+            SPEED_MULTIPLIER = 0.1;
+            TURN_SPEED_MULTIPLIER = 0.4;
         }
         slowModeActivated = !slowModeActivated;
     }
