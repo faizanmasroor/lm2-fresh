@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.control;
 
 public class PowerManager
 {
-    public final double slowdown, initialError, minPower, maxPower;
+    public double slowdown, initialError, minPower, maxPower;
 
     public PowerManager(int slowdown, int initialError, double minPower, double maxPower)
     {
@@ -23,7 +23,7 @@ public class PowerManager
         {
             return ((minPower - maxPower) / slowdown) * (currError - initialError) + minPower;
         }
-        return 0; // Mathematically unreachable
+        return minPower; // idk
     }
 
 
@@ -45,5 +45,10 @@ public class PowerManager
     public double getMaxPower()
     {
         return maxPower;
+    }
+
+    // HACK:
+    public void addToInitialError(double x) {
+        this.initialError += x;
     }
 }

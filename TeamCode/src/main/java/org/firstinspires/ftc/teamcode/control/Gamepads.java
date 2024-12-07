@@ -8,10 +8,12 @@ public class Gamepads
 
     public Gamepads(Gamepad gp1, Gamepad gp2)
     {
-        currGP1 = gp1;
+        currGP1 = new Gamepad();
         prevGP1 = new Gamepad();
-        currGP2 = gp2;
+        currGP2 = new Gamepad();
         prevGP2 = new Gamepad();
+
+        this.update(gp1, gp2);
     }
 
     public boolean justEnteredThreshold(Analog analog, double threshold)

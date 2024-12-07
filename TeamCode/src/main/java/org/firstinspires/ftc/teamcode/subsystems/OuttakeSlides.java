@@ -10,20 +10,20 @@ import org.firstinspires.ftc.teamcode.helpers.SlideUtils;
 public class OuttakeSlides
 {
     public static final double MAX_POSITION = 3750;
-    public static final double POSITION_BUFFER = 50;
+    public static final double POSITION_BUFFER = 100;
     public static final double SPEED_MULTIPLIER = 0.5;
     public static final double GRAVITY_FEEDFORWARD = 0.0006;
 
-    public static final int SLOWDOWN = 500;
+    public static final int SLOWDOWN = 200;
     public static final int ERROR_BUFFER = 30;
-    public static final double MIN_POWER = 0.1; // Has to be greater than 0
-    public static final double MAX_POWER = 0.6;
+    public static final double MIN_POWER = 0.2; // Has to be greater than 0
+    public static final double MAX_POWER = 0.8;
 
     public static final int REST_HEIGHT = 0;
-    public static final int L_CHAMBER_HEIGHT = 200;
-    public static final int L_BASKET_HEIGHT = 400;
-    public static final int H_CHAMBER_HEIGHT = 600;
-    public static final int H_BASKET_HEIGHT = 800;
+    public static final int L_CHAMBER_HEIGHT = 670;
+    public static final int L_BASKET_HEIGHT = 1600;
+    public static final int H_CHAMBER_HEIGHT = 2070;
+    public static final int H_BASKET_HEIGHT = 3720;
 
     public DcMotor motorL, motorR;
     public PowerManager powerManager;
@@ -80,7 +80,7 @@ public class OuttakeSlides
 
     public void setHeight(Height newHeight)
     {
-        if (newHeight == height || newHeight == Height.UNINITIALIZED || inMotion) return;
+        if (newHeight == height || newHeight == Height.UNINITIALIZED) return;
 
         int target = getHeightInTicks(newHeight);
         int initialError = Math.abs(target - SlideUtils.getAveragePosition(motorL, motorR));

@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class OuttakeArm
 {
-    public static final double RETRACT_POSITION = 0.18;
-    public static final double EXTEND_POSITION = 0.95;
+    public static final double RETRACT_POSITION = 0.89;
+    public static final double EXTEND_POSITION = 0.08;
 
     public Servo servoArm;
     public Position position;

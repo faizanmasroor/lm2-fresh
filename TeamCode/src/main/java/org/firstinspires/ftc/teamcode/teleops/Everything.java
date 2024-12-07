@@ -215,13 +215,14 @@ public class Everything extends OpMode
         }
 
         double iSlidesInput = gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_Y);
-        double oSlidesInput = gamepads.getAnalogValue(Analog.GP2_RIGHT_STICK_Y);
+        if (!iSlides.isDangerousInput(iSlidesInput)) iSlides.setPower(iSlidesInput);
+        else iSlides.setPower(0);
 
-        iSlides.setPower(iSlidesInput);
-        oSlides.setPower(oSlidesInput);
+        double oSlidesInput = gamepads.getAnalogValue(Analog.GP2_RIGHT_STICK_Y);
+        if (!oSlides.isDangerousInput(oSlidesInput)) oSlides.setPower(oSlidesInput);
+        else oSlides.setPower(0);
 
         telemetry.addData("Raw Intake Slide Input", iSlidesInput);
-        telemetry.addData("Raw Outtake Slide Input", oSlidesInput);
         telemetry.addData("In L Position", iSlides.motorL.getCurrentPosition());
         telemetry.addData("In R Position", iSlides.motorR.getCurrentPosition());
         telemetry.addData("Out L Position", oSlides.motorL.getCurrentPosition());
