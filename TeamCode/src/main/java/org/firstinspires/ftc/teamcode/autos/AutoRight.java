@@ -103,10 +103,10 @@ public class AutoRight extends LinearOpMode {
 
         iArmL = hardwareMap.get(Servo.class, "L1");
         iArmR = hardwareMap.get(Servo.class, "R1");
-        iArmLExtendPosition = 0.08;
-        iArmRExtendPosition = 0.92;
-        iArmLRetractPosition = 0.96;
-        iArmRRetractPosition = 0.04;
+        iArmLExtendPosition = 0.057;
+        iArmRExtendPosition = 0.943;
+        iArmLRetractPosition = 0.87;
+        iArmRRetractPosition = 0.13;
 
         // Initialize the drive system variables.
         fr = hardwareMap.get(DcMotor.class, "fr");
@@ -141,8 +141,8 @@ public class AutoRight extends LinearOpMode {
         MECANUM_DRIVE_TURN_SPEED = 0.7;
 
         oClaw = hardwareMap.get(Servo.class, "oClaw");
-        oClawClosePosition = 0.16;
-        oClawOpenPosition = 0.035;
+        oClawClosePosition = 0.55;
+        oClawOpenPosition = 0.4;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.

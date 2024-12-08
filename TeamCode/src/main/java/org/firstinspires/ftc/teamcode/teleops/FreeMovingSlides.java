@@ -1,15 +1,9 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-import org.firstinspires.ftc.teamcode.control.Button;
-import org.firstinspires.ftc.teamcode.control.Gamepads;
-import org.firstinspires.ftc.teamcode.subsystems.OuttakeSlides;
 
 @TeleOp(name = "FreeMovingSlides")
 public class FreeMovingSlides extends OpMode

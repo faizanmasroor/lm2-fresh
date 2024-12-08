@@ -8,11 +8,11 @@ public class IntakeArm
     public static final double L_RETRACT_POSITION = 0.87;
     public static final double R_RETRACT_POSITION = 0.13;
 
-    public static final double L_HOVER_POSITION = 0.14;
-    public static final double R_HOVER_POSITION = 0.86;
+    public static final double L_HOVER_POSITION = 0.15;
+    public static final double R_HOVER_POSITION = 0.85;
 
-    public static final double L_EXTEND_POSITION = 0.057;
-    public static final double R_EXTEND_POSITION = 0.943;
+    public static final double L_EXTEND_POSITION = 0;
+    public static final double R_EXTEND_POSITION = 1;
 
     public static final int TIME_BETWEEN_RETRACT_HOVER_MS = 900;
     public static final int TIME_BETWEEN_HOVER_EXTEND_MS = 400;

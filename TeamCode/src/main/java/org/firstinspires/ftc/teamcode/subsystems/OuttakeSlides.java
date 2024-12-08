@@ -11,7 +11,7 @@ public class OuttakeSlides
 {
     public static final double MAX_POSITION = 3750;
     public static final double POSITION_BUFFER = 100;
-    public static final double SPEED_MULTIPLIER = 0.5;
+    public static final double SPEED_MULTIPLIER = 0.65;
     public static final double GRAVITY_FEEDFORWARD = 0.0006;
 
     public static final int SLOWDOWN = 200;

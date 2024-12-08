@@ -62,11 +62,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AutoLeft")
-public class AutoLeft extends LinearOpMode {
+@Autonomous(name="ParkLeftDelay")
+public class ParkLeftDelay extends LinearOpMode {
 
     /* Declare OpMode members. */
-
+    private DcMotor         leftDrive   = null;
+    private DcMotor         rightDrive  = null;
 
     private ElapsedTime     runtime = new ElapsedTime();
 
@@ -96,17 +97,9 @@ public class AutoLeft extends LinearOpMode {
 
     public Servo oClaw;
     public double oClawClosePosition, oClawOpenPosition;
-    public boolean oClawIsOpen;
 
     @Override
     public void runOpMode() {
-
-        iArmL = hardwareMap.get(Servo.class, "L1");
-        iArmR = hardwareMap.get(Servo.class, "R1");
-        iArmLExtendPosition = 0.057;
-        iArmRExtendPosition = 0.943;
-        iArmLRetractPosition = 0.87;
-        iArmRRetractPosition = 0.13;
 
         // Initialize the drive system variables.
         fr = hardwareMap.get(DcMotor.class, "fr");
@@ -137,8 +130,6 @@ public class AutoLeft extends LinearOpMode {
         br.setPower(0);
         bl.setPower(0);
 
-        MECANUM_DRIVE_SPEED = 0.5;
-        MECANUM_DRIVE_TURN_SPEED = 0.7;
 
         oClaw = hardwareMap.get(Servo.class, "oClaw");
         oClawClosePosition = 0.55;
@@ -164,10 +155,9 @@ public class AutoLeft extends LinearOpMode {
 
          */
 
+        sleep(15000);
         moveForward();
         strafeRight();
-        retractIntakeArm();
-        closeOuttakeClaw();
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -177,11 +167,11 @@ public class AutoLeft extends LinearOpMode {
 
 
     public void moveForward() {
-        fr.setPower(0.1);
-        fl.setPower(0.1);
-        br.setPower(0.1);
-        bl.setPower(0.1);
-        sleep(400);
+        fr.setPower(0.05);
+        fl.setPower(0.05);
+        br.setPower(0.05);
+        bl.setPower(0.05);
+        sleep(1000);
         fr.setPower(0);
         fl.setPower(0);
         br.setPower(0);
@@ -189,11 +179,11 @@ public class AutoLeft extends LinearOpMode {
     }
 
     public void strafeRight() {
-        fr.setPower(0.5);
-        fl.setPower(-0.5);
-        br.setPower(-0.5);
-        bl.setPower(0.5);
-        sleep(1100);
+        fr.setPower(-0.4);
+        fl.setPower(0.4);
+        br.setPower(0.4);
+        bl.setPower(-0.4);
+        sleep(5000);
         fr.setPower(0);
         fl.setPower(0);
         br.setPower(0);
