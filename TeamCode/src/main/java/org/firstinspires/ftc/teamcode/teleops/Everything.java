@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleops;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -19,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.OuttakeSlides;
 import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
 
 @TeleOp(name = "Everything")
+@Photon
 public class Everything extends OpMode
 {
     public static final double TRIGGER_THRESHOLD = 0.5;
